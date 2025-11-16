@@ -1,4 +1,4 @@
-role=domain_controllers
-role=member_servers
-role=workstations. 
-
+stig_roles:
+  - domain_controllers
+  - member_servers
+  - workstations
