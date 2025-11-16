@@ -1,1 +1,15 @@
+- name: Generate STIG Rollup for Single Role
+  hosts: windows_stig_server
+  gather_facts: no
+
+  vars:
+    share_root: "\\192.168.10.198\STIG-Results"
+
+  tasks:
+    - name: Run STIG Rollup for {{ role }}
+      win_shell: |
+        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\StigRollupReport.ps1" `
+          -ShareRoot "{{ share_root }}" `
+          -RoleName "{{ role }}" `
+          -OutputName "STIG-Rollup.html"
 
