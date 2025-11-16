@@ -1,1 +1,23 @@
+- name: Generate All STIG Rollups + Master Rollup
+  hosts: windows_stig_server
+  gather_facts: no
+  vars_files:
+    - ../vars/roles.yml
+
+  tasks:
+
+    - name: Generate per-role rollups
+      win_shell: |
+        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\StigRollupReport.ps1" `
+          -ShareRoot "\\192.168.10.198\STIG-Results" `
+          -RoleName "{{ item }}" `
+          -OutputName "STIG-Rollup.html"
+      loop: "{{ stig_roles }}"
+
+    - name: Generate master rollup (all roles)
+      win_shell: |
+        powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\scripts\StigRollupReport-Master.ps1" `
+          -ShareRoot "\\192.168.10.198\STIG-Results" `
+          -RoleList "{{ stig_roles -join ',' }}" `
+          -OutputName "STIG-MasterRollup.html"
 
